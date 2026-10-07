@@ -9,6 +9,4 @@ fi
 
 .venv/bin/python -m pip install -r requirements.txt
 
-.venv/bin/python -c "from database import init_db; init_db()"
-
 exec .venv/bin/python run.py

@@ -46,17 +46,106 @@ pip install -r requirements.txt
 python run.py
 ```
 
-## Health Check
+---
+
+# API Endpoints
+
+Current implemented endpoints:
+
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/health` | Check API health |
+| POST | `/api/v1/trips` | Create a trip |
+| GET | `/api/v1/trips` | List all trips |
+| GET | `/api/v1/trips/<trip_id>` | Get a specific trip |
+| PUT | `/api/v1/trips/<trip_id>` | Update a trip |
+| DELETE | `/api/v1/trips/<trip_id>` | Delete a trip |
+
+Upcoming endpoints:
+
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/api/v1/trips/<trip_id>/travelers` | Add traveler |
+| DELETE | `/api/v1/trips/<trip_id>/travelers/<traveler_id>` | Remove traveler |
+| POST | `/api/v1/trips/<trip_id>/expenses` | Add expense |
+| PATCH | `/api/v1/trips/<trip_id>/status` | Change status |
+| GET | `/api/v1/trips/<trip_id>/summary` | Trip summary |
+
+---
+
+# Health Check
+
+Request:
 
 ```bash
 curl -i http://127.0.0.1:5000/health
 ```
 
-Successful response: HTTP 200 with:
+Response:
 
 ```json
-{"status": "ok"}
+{
+    "status": "ok"
+}
 ```
+
+---
+
+# Trip API Examples
+
+## Create Trip
+
+Request:
+
+```bash
+curl -X POST http://127.0.0.1:5000/api/v1/trips \
+-H "Content-Type: application/json" \
+-d '
+{
+ "destination":"Coxs Bazar",
+ "start_date":"2026-12-01",
+ "end_date":"2026-12-05",
+ "budget":50000,
+ "max_travelers":5
+}'
+```
+
+Response:
+
+```json
+{
+    "id":1,
+    "message":"Trip created successfully"
+}
+```
+
+---
+
+## Get Trips
+
+Request:
+
+```bash
+curl http://127.0.0.1:5000/api/v1/trips
+```
+
+Response:
+
+```json
+[
+ {
+  "id":1,
+  "destination":"Coxs Bazar",
+  "start_date":"2026-12-01",
+  "end_date":"2026-12-05",
+  "budget":50000,
+  "max_travelers":5,
+  "status":"PLANNED"
+ }
+]
+```
+
+---
 
 ## Database Storage
 
