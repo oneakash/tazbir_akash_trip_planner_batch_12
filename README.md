@@ -84,7 +84,7 @@ sudo apt install python3 python3-venv python3-pip git
 Clone the repository:
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/oneakash/tazbir_akash_trip_planner_batch_12.git
 
 cd trip_planner
 ```
