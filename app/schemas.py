@@ -1,6 +1,9 @@
 from datetime import date
 from pydantic import BaseModel,Field,field_validator,model_validator
 
+class StatusSchema(BaseModel):
+    status:str
+
 class TripSchema(BaseModel):
     destination:str=Field(min_length=1)
     start_date:date

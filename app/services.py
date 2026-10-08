@@ -51,6 +51,12 @@ def update_trip(trip_id,data):
     conn=get_connection()
     try:
         get_trip_or_fail(conn,trip_id)
+        if trip["status"] in ("COMPLETED","CANCELLED"):
+            raise ApiError(
+                "TRIP_LOCKED",
+                "Completed or cancelled trips cannot be edited.",
+                409
+            )
         traveler_count=get_traveler_count(conn,trip_id)
         total_expense=get_total_expense(conn,trip_id)
 
@@ -98,6 +104,12 @@ def delete_trip(trip_id):
     conn=get_connection()
     try:
         get_trip_or_fail(conn,trip_id)
+        if trip["status"] in ("COMPLETED","CANCELLED"):
+            raise ApiError(
+                "TRIP_LOCKED",
+                "Completed or cancelled trips cannot be deleted.",
+                409
+            )
         conn.execute("DELETE FROM trips WHERE id=?",(trip_id,))
         conn.commit()
     finally:
@@ -246,5 +258,42 @@ def get_trip_summary(trip_id):
             "total_expense":total_expense,
             "remaining_budget":float(trip["budget"])-total_expense
         }
+    finally:
+        conn.close()
+
+ALLOWED_TRANSITIONS={
+    "PLANNED":["ONGOING","CANCELLED"],
+    "ONGOING":["COMPLETED","CANCELLED"],
+    "COMPLETED":[],
+    "CANCELLED":[]
+}
+
+
+def update_trip_status(trip_id,new_status):
+    conn=get_connection()
+
+    try:
+        trip=get_trip_or_fail(conn,trip_id)
+
+        current=trip["status"]
+
+        if new_status not in ALLOWED_TRANSITIONS[current]:
+            raise ApiError(
+                "INVALID_STATUS_TRANSITION",
+                f"Cannot change status from {current} to {new_status}.",
+                409
+            )
+
+        conn.execute(
+            """
+            UPDATE trips
+            SET status=?
+            WHERE id=?
+            """,
+            (new_status,trip_id)
+        )
+
+        conn.commit()
+
     finally:
         conn.close()

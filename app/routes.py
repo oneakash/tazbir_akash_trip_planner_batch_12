@@ -1,6 +1,8 @@
 from flask import jsonify,request
 from pydantic import ValidationError
 from .schemas import TripSchema,TravelerSchema,ExpenseSchema
+from .schemas import StatusSchema
+from .services import update_trip_status
 from .services import (
     create_trip,get_all_trips,get_trip,update_trip,delete_trip,
     add_traveler,remove_traveler,add_expense,get_trip_summary
@@ -91,3 +93,19 @@ def register_routes(app):
     @app.get("/api/v1/trips/<int:trip_id>/summary")
     def summary_route(trip_id):
         return jsonify(get_trip_summary(trip_id)),200
+
+    @app.patch("/api/v1/trips/<int:trip_id>/status")
+    def update_status_route(trip_id):
+
+        data=parse_json(StatusSchema)
+
+        update_trip_status(
+            trip_id,
+            data.status
+        )
+
+        return jsonify(
+            {
+                "message":"Trip status updated successfully"
+            }
+        ),200
