@@ -89,14 +89,14 @@ git clone https://github.com/oneakash/tazbir_akash_trip_planner_batch_12.git
 cd trip_planner
 ```
 
-# Run tests
-```
-./test.sh
-```
-
-# Start application
+## Start application
 ```
 ./run.sh
+```
+
+## Run tests
+```
+./test.sh
 ```
 
 The script automatically:
