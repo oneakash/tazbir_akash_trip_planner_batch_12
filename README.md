@@ -89,9 +89,13 @@ git clone <repository-url>
 cd trip_planner
 ```
 
-Run:
+# Run tests
+```
+./test.sh
+```
 
-```bash
+# Start application
+```
 ./run.sh
 ```
 
