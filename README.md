@@ -86,7 +86,7 @@ Clone the repository:
 ```bash
 git clone https://github.com/oneakash/tazbir_akash_trip_planner_batch_12.git
 
-cd trip_planner
+cd tazbir_akash_trip_planner_batch_12
 ```
 
 # Run tests
